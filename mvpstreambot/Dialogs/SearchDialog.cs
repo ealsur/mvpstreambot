@@ -1,5 +1,6 @@
 ﻿using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
+using mvpstreambot.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace mvpstreambot.Dialogs
     public class SearchDialog : IDialog<object>
 
     {
-
+        private string query = string.Empty;
         public async Task StartAsync(IDialogContext context)
 
         {
@@ -27,10 +28,21 @@ namespace mvpstreambot.Dialogs
         public async Task MessageReceivedAsync(IDialogContext context, IAwaitable<Message> argument)
 
         {
-
             var message = await argument;
-
-            await context.PostAsync("You said: " + message.Text);
+            if(!string.Empty.Equals(query) && message.Text.ToLowerInvariant().StartsWith("y "))
+            {
+                ;//Agregado de filtros
+            }
+            var resultados = SearchService.SearchDocuments(message.Text, null, null);
+            if (resultados.Count > 0)
+            {
+                await context.PostAsync(string.Join(System.Environment.NewLine,resultados.Entries.Select(x=>x.Titulo).ToArray()));
+            }
+            else
+            {
+                await context.PostAsync("No encontré resultados para lo que estabas buscando.");
+            }
+            
 
             context.Wait(MessageReceivedAsync);
 
