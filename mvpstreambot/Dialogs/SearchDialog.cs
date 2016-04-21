@@ -1,5 +1,6 @@
 ﻿using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
+using mvpstreambot.Models;
 using mvpstreambot.Services;
 using System;
 using System.Collections.Generic;
@@ -36,7 +37,7 @@ namespace mvpstreambot.Dialogs
             var resultados = SearchService.SearchDocuments(message.Text, null, null);
             if (resultados.Count > 0)
             {
-                await context.PostAsync(string.Join(System.Environment.NewLine,resultados.Entries.Select(x=>x.Titulo).ToArray()));
+                await context.PostAsync(string.Join("",resultados.Entries.Select(x=>x.ToMarkDown()).ToArray()));
             }
             else
             {

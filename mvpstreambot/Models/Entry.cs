@@ -22,4 +22,12 @@ namespace mvpstreambot.Models
         public List<string> Tags { get; set; }
         public string Descripcion { get; set; }
     }
+
+    public static class EntryExtensions
+    {
+        public static string ToMarkDown(this Entry source)
+        {
+            return "";
+        }
+    }
 }
