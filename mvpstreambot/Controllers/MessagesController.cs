@@ -8,6 +8,8 @@ using System.Web.Http.Description;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Connector.Utilities;
 using Newtonsoft.Json;
+using Microsoft.Bot.Builder.Dialogs;
+using mvpstreambot.Dialogs;
 
 namespace mvpstreambot
 {
@@ -22,11 +24,8 @@ namespace mvpstreambot
         {
             if (message.Type == "Message")
             {
-                // calculate something for us to return
-                int length = (message.Text ?? string.Empty).Length;
+                return await Conversation.SendAsync(message, () => new SearchDialog());
 
-                // return our reply to the user
-                return message.CreateReplyMessage($"You sent {length} characters");
             }
             else
             {
