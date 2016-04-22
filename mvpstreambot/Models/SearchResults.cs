@@ -11,10 +11,10 @@ namespace mvpstreambot.Models
 
     public static class SearchResultsExtensions
     {
-        public static string ToMarkDown(this SearchResults source)
+        public static string ToMarkDown(this SearchResults source, string query)
         {
             var retval = new StringBuilder();
-            retval.AppendLine($"Encontré **{source.Count} resultados.**");
+            retval.AppendLine($"Encontré **{source.Count} resultados.** para tu búsqueda *{query}*");
             foreach (var item in source.Entries)
             {
                 retval.AppendLine(item.ToMarkDown());

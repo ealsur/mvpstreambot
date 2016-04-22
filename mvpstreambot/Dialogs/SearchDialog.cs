@@ -46,18 +46,16 @@ namespace mvpstreambot.Dialogs
                     filter = luisResponse.Entities.Where(x => x.Type == "ContentType").Select(x=>x.Entity).FirstOrDefault();
                     query = luisResponse.Entities.Where(x => x.Type == "Entity").Select(x => x.Entity).FirstOrDefault();
                     page = 1;
-                    DoSearch(query, filter, page);
-                    await context.PostAsync(DoSearch(query, filter, page).ToMarkDown());
+                   await context.PostAsync(DoSearch(query, filter, page).ToMarkDown(query));
                     break;
                 case "MoreResults":
                     ++page;
-                    DoSearch(query, filter, page);
-                    await context.PostAsync(DoSearch(query, filter, page).ToMarkDown());
+                    await context.PostAsync(DoSearch(query, filter, page).ToMarkDown(query));
                     break;
                 case "AddContent":
                     query = query +" "+luisResponse.Entities.Where(x => x.Type == "Entity").Select(x => x.Entity).FirstOrDefault();
                     page = 1;
-                    await context.PostAsync(DoSearch(query, filter, page).ToMarkDown());
+                    await context.PostAsync(DoSearch(query, filter, page).ToMarkDown(query));
                     break;
                 case "Greetings":
                     await context.PostAsync("Hola! Soy una entidad etérea creada por [ealsur](https://twitter.com/ealsur) usando [Bot Framework](https://dev.botframework.com/) y [LUIS](https://www.luis.ai/).");
