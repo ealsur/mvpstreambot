@@ -23,7 +23,7 @@ namespace mvpstreambot.Services
             }
             using(var client = new HttpClient())
             {
-                return JsonConvert.DeserializeObject<LUISResponse>(await client.GetStringAsync($"https://api.projectoxford.ai/luis/v1/application?id={AppId}&subscription-key={SubscriptionKey}&q={System.Uri.EscapeDataString(query)}"));
+                return JsonConvert.DeserializeObject<LUISResponse>(await client.GetStringAsync($"https://api.projectoxford.ai/luis/v1/application?id={AppId}&subscription-key={SubscriptionKey}&q={query}"));
             }
         }
     }
