@@ -17,11 +17,11 @@ namespace mvpstreambot.Services
         }
         public static async Task<LUISResponse> GetIntent(string query)
         {
-            if (string.IsNullOrEmpty(query))
+            if (string.IsNullOrEmpty(query) || query.StartsWith("hi") || query.StartsWith("hello") || query.StartsWith("hola"))
             {
                 return new LUISResponse() { Intents = new List<LUISIntent>() { new LUISIntent() { Intent = "Greetings" } } };
             }
-            using(var client = new HttpClient())
+            using (var client = new HttpClient())
             {
                 return JsonConvert.DeserializeObject<LUISResponse>(await client.GetStringAsync($"https://api.projectoxford.ai/luis/v1/application?id={AppId}&subscription-key={SubscriptionKey}&q={query}"));
             }

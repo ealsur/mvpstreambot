@@ -32,9 +32,9 @@ namespace mvpstreambot.Dialogs
 
         {
             var message = await argument;
-
+            var texto = message.Text.ToLowerInvariant();
             //LUIS integration
-            var luisResponse = await LUISService.GetIntent(message.Text);
+            var luisResponse = await LUISService.GetIntent(texto);
             var mostRelevantIntent = luisResponse.Intents.FirstOrDefault();
             if (mostRelevantIntent==null) {
                 await context.PostAsync("No entendí lo que necesitabas, probá en [Stackoverflow](http://stackoverflow.com/).");
@@ -47,7 +47,7 @@ namespace mvpstreambot.Dialogs
                     query = luisResponse.Entities.Where(x => x.Type == "Topic").Select(x => x.Entity).FirstOrDefault();
                     if (string.IsNullOrEmpty(query))
                     {
-                        query = message.Text.Split(' ').LastOrDefault();
+                        query = texto.Split(' ').LastOrDefault();
                     }
                     page = 1;
                     await context.PostAsync(DoSearch(query, filter, page).ToMarkDown(query));
@@ -60,7 +60,7 @@ namespace mvpstreambot.Dialogs
                     var newQuery = luisResponse.Entities.Where(x => x.Type == "Topic").Select(x => x.Entity).FirstOrDefault();
                     if (string.IsNullOrEmpty(newQuery))
                     {
-                        newQuery = message.Text.Split(' ').LastOrDefault();
+                        newQuery = texto.Split(' ').LastOrDefault();
                     }
                     query = query +" "+ newQuery;
                     page = 1;
