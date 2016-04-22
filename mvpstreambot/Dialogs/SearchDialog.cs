@@ -45,20 +45,28 @@ namespace mvpstreambot.Dialogs
                 case "FindContent":
                     filter = luisResponse.Entities.Where(x => x.Type == "ContentType").Select(x=>x.Entity).FirstOrDefault();
                     query = luisResponse.Entities.Where(x => x.Type == "Topic").Select(x => x.Entity).FirstOrDefault();
+                    if (string.IsNullOrEmpty(query))
+                    {
+                        query = message.Text.Split(' ').LastOrDefault();
+                    }
                     page = 1;
-                   await context.PostAsync(DoSearch(query, filter, page).ToMarkDown(query));
+                    await context.PostAsync($"Buscando contenido sobre {query}...");
+                    await context.PostAsync(DoSearch(query, filter, page).ToMarkDown(query));
                     break;
                 case "MoreResults":
                     ++page;
+                    await context.PostAsync($"Buscando más sobre {query}...");
                     await context.PostAsync(DoSearch(query, filter, page).ToMarkDown(query));
                     break;
                 case "AddContent":
                     query = query +" "+luisResponse.Entities.Where(x => x.Type == "Topic").Select(x => x.Entity).FirstOrDefault();
                     page = 1;
+                    await context.PostAsync($"Buscando contenido sobre {query}...");
                     await context.PostAsync(DoSearch(query, filter, page).ToMarkDown(query));
                     break;
                 case "Greetings":
                     await context.PostAsync("Hola! Soy una entidad etérea creada por [ealsur](https://twitter.com/ealsur) usando [Bot Framework](https://dev.botframework.com/) y [LUIS](https://www.luis.ai/).");
+                    await context.PostAsync("Probá *quiero ver videos de azure* o *mostrame lo que tengas sobre powershell*.");
                     break;
                 default:
                     await context.PostAsync("No entendí lo que necesitabas, probá con preguntas como *quiero ver videos de azure* o *mostrame material sobre sharepoint*.");
