@@ -13,17 +13,21 @@ namespace mvpstreambot.Models
     {
         public static string ToMarkDown(this SearchResults source, string query)
         {
-            var retval = new StringBuilder();
-            retval.AppendLine($"Encontré **{source.Count} resultados.** para tu búsqueda *{query}*");
-            foreach (var item in source.Entries)
+            if (source.Count > 0)
             {
-                retval.AppendLine(item.ToMarkDown());
+                var retval = new StringBuilder();
+                retval.AppendLine($"Encontré **{source.Count} resultados.** para tu búsqueda *{query}*");
+                foreach (var item in source.Entries)
+                {
+                    retval.AppendLine(item.ToMarkDown());
+                }
+                if (source.Count > 10)
+                {
+                    retval.AppendLine($"Si querés ver más, pedime *ver más*");
+                }
+                return retval.ToString();
             }
-            if (source.Count > 10)
-            {
-                retval.AppendLine($"Si querés ver más, pedime *ver más*");
-            }
-            return retval.ToString();
+            return "No encontré lo que estabas buscando, probá en [Stackoverflow](http://stackoverflow.com/).";
         }
     }
 }

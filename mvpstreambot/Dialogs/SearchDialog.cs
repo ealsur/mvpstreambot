@@ -81,13 +81,16 @@ namespace mvpstreambot.Dialogs
         private static SearchResults DoSearch(string query, string filter, int page=1)
         {
             string tipo = null;
-            if (filter.ToLowerInvariant().Contains("video"))
+            if (string.IsNullOrEmpty(filter))
             {
-                tipo = "Tipo eq 'Video'";
-            }
-            if (filter.ToLowerInvariant().Contains("articul") || filter.ToLowerInvariant().Contains("post") || filter.ToLowerInvariant().Contains("artícul"))
-            {
-                tipo = "Tipo eq 'RSS'";
+                if (filter.ToLowerInvariant().Contains("video"))
+                {
+                    tipo = "Tipo eq 'Video'";
+                }
+                if (filter.ToLowerInvariant().Contains("articul") || filter.ToLowerInvariant().Contains("post") || filter.ToLowerInvariant().Contains("artícul"))
+                {
+                    tipo = "Tipo eq 'RSS'";
+                }
             }
             return SearchService.SearchDocuments(query, tipo, "Fecha desc", page);
         }
