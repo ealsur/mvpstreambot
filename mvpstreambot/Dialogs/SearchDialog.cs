@@ -50,12 +50,10 @@ namespace mvpstreambot.Dialogs
                         query = message.Text.Split(' ').LastOrDefault();
                     }
                     page = 1;
-                    await context.PostAsync($"Buscando contenido sobre {query}...");
                     await context.PostAsync(DoSearch(query, filter, page).ToMarkDown(query));
                     break;
                 case "MoreResults":
                     ++page;
-                    await context.PostAsync($"Buscando más sobre {query}...");
                     await context.PostAsync(DoSearch(query, filter, page).ToMarkDown(query));
                     break;
                 case "AddContent":
@@ -66,7 +64,6 @@ namespace mvpstreambot.Dialogs
                     }
                     query = query +" "+ newQuery;
                     page = 1;
-                    await context.PostAsync($"Buscando contenido sobre {query}...");
                     await context.PostAsync(DoSearch(query, filter, page).ToMarkDown(query));
                     break;
                 case "Greetings":
