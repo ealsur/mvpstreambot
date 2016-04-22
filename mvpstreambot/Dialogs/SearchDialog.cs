@@ -44,7 +44,7 @@ namespace mvpstreambot.Dialogs
             {
                 case "FindContent":
                     filter = luisResponse.Entities.Where(x => x.Type == "ContentType").Select(x=>x.Entity).FirstOrDefault();
-                    query = luisResponse.Entities.Where(x => x.Type == "Entity").Select(x => x.Entity).FirstOrDefault();
+                    query = luisResponse.Entities.Where(x => x.Type == "Topic").Select(x => x.Entity).FirstOrDefault();
                     page = 1;
                    await context.PostAsync(DoSearch(query, filter, page).ToMarkDown(query));
                     break;
@@ -53,7 +53,7 @@ namespace mvpstreambot.Dialogs
                     await context.PostAsync(DoSearch(query, filter, page).ToMarkDown(query));
                     break;
                 case "AddContent":
-                    query = query +" "+luisResponse.Entities.Where(x => x.Type == "Entity").Select(x => x.Entity).FirstOrDefault();
+                    query = query +" "+luisResponse.Entities.Where(x => x.Type == "Topic").Select(x => x.Entity).FirstOrDefault();
                     page = 1;
                     await context.PostAsync(DoSearch(query, filter, page).ToMarkDown(query));
                     break;
