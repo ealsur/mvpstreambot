@@ -81,7 +81,7 @@ namespace mvpstreambot.Dialogs
         private static SearchResults DoSearch(string query, string filter, int page=1)
         {
             string tipo = null;
-            if (string.IsNullOrEmpty(filter))
+            if (!string.IsNullOrEmpty(filter))
             {
                 if (filter.ToLowerInvariant().Contains("video"))
                 {
