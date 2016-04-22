@@ -59,7 +59,12 @@ namespace mvpstreambot.Dialogs
                     await context.PostAsync(DoSearch(query, filter, page).ToMarkDown(query));
                     break;
                 case "AddContent":
-                    query = query +" "+luisResponse.Entities.Where(x => x.Type == "Topic").Select(x => x.Entity).FirstOrDefault();
+                    var newQuery = luisResponse.Entities.Where(x => x.Type == "Topic").Select(x => x.Entity).FirstOrDefault();
+                    if (string.IsNullOrEmpty(newQuery))
+                    {
+                        newQuery = message.Text.Split(' ').LastOrDefault();
+                    }
+                    query = query +" "+ newQuery;
                     page = 1;
                     await context.PostAsync($"Buscando contenido sobre {query}...");
                     await context.PostAsync(DoSearch(query, filter, page).ToMarkDown(query));
