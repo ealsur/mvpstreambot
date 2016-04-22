@@ -19,7 +19,10 @@ namespace mvpstreambot.Models
             {
                 retval.AppendLine(item.ToMarkDown());
             }
-            retval.AppendLine($"Si querés ver más, pedime *ver más*");
+            if (source.Count > 10)
+            {
+                retval.AppendLine($"Si querés ver más, pedime *ver más*");
+            }
             return retval.ToString();
         }
     }
