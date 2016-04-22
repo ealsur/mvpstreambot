@@ -70,7 +70,8 @@ namespace mvpstreambot.Dialogs
                     await context.PostAsync(DoSearch(query, filter, page).ToMarkDown(query));
                     break;
                 case "Greetings":
-                    await context.PostAsync("Hola! Soy una entidad etérea creada por [ealsur](https://twitter.com/ealsur) usando [Bot Framework](https://dev.botframework.com/) y [LUIS](https://www.luis.ai/). Probá *quiero ver videos de azure* o *mostrame lo que tengas sobre powershell*.");
+                    await context.PostAsync("Hola! Soy una entidad etérea creada por [ealsur](https://twitter.com/ealsur) usando [Bot Framework](https://dev.botframework.com/) y [LUIS](https://www.luis.ai/).");
+                    await context.PostAsync("Probá *quiero ver videos de azure* o *mostrame lo que tengas sobre powershell*.");
                     break;
                 default:
                     await context.PostAsync("No entendí lo que necesitabas, probá con preguntas como *quiero ver videos de azure* o *mostrame material sobre sharepoint*.");
