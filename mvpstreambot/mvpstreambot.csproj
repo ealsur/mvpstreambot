@@ -130,6 +130,7 @@
     <Compile Include="Models\Entry.cs" />
     <Compile Include="Models\SearchResults.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\LUISService.cs" />
     <Compile Include="Services\SearchService.cs" />
   </ItemGroup>
   <ItemGroup>

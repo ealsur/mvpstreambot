@@ -16,6 +16,8 @@ namespace mvpstreambot.Dialogs
 
     {
         private string query = string.Empty;
+        private string filter = string.Empty;
+        private int page = 1;
         public async Task StartAsync(IDialogContext context)
 
         {
@@ -30,23 +32,57 @@ namespace mvpstreambot.Dialogs
 
         {
             var message = await argument;
-            if(!string.Empty.Equals(query) && message.Text.ToLowerInvariant().StartsWith("y "))
-            {
-                ;//Agregado de filtros
+
+            //LUIS integration
+            var luisResponse = await LUISService.GetIntent(message.Text);
+            var mostRelevantIntent = luisResponse.Intents.FirstOrDefault();
+            if (mostRelevantIntent==null) {
+                await context.PostAsync("No entendí lo que necesitabas, probá en [Stackoverflow](http://stackoverflow.com/).");
+                return;
             }
-            var resultados = SearchService.SearchDocuments(message.Text, null, null);
-            if (resultados.Count > 0)
+            switch (mostRelevantIntent.Intent)
             {
-                await context.PostAsync(string.Join("",resultados.Entries.Select(x=>x.ToMarkDown()).ToArray()));
-            }
-            else
-            {
-                await context.PostAsync("No encontré resultados para lo que estabas buscando.");
+                case "FindContent":
+                    filter = luisResponse.Entities.Where(x => x.Type == "ContentType").Select(x=>x.Entity).FirstOrDefault();
+                    query = luisResponse.Entities.Where(x => x.Type == "Entity").Select(x => x.Entity).FirstOrDefault();
+                    page = 1;
+                    DoSearch(query, filter, page);
+                    await context.PostAsync(DoSearch(query, filter, page).ToMarkDown());
+                    break;
+                case "MoreResults":
+                    ++page;
+                    DoSearch(query, filter, page);
+                    await context.PostAsync(DoSearch(query, filter, page).ToMarkDown());
+                    break;
+                case "AddContent":
+                    query = query +" "+luisResponse.Entities.Where(x => x.Type == "Entity").Select(x => x.Entity).FirstOrDefault();
+                    page = 1;
+                    await context.PostAsync(DoSearch(query, filter, page).ToMarkDown());
+                    break;
+                case "Greetings":
+                    await context.PostAsync("Hola! Soy una entidad etérea creada por [ealsur](https://twitter.com/ealsur) usando [Bot Framework](https://dev.botframework.com/) y [LUIS](https://www.luis.ai/).");
+                    break;
+                default:
+                    await context.PostAsync("No entendí lo que necesitabas, probá con preguntas como *quiero ver videos de azure* o *mostrame material sobre sharepoint*.");
+                    break;
             }
             
-
             context.Wait(MessageReceivedAsync);
 
+        }
+
+        private static SearchResults DoSearch(string query, string filter, int page=1)
+        {
+            string tipo = null;
+            if (filter.ToLowerInvariant().Contains("video"))
+            {
+                tipo = "Tipo eq 'Video'";
+            }
+            if (filter.ToLowerInvariant().Contains("articul") || filter.ToLowerInvariant().Contains("post") || filter.ToLowerInvariant().Contains("artícul"))
+            {
+                tipo = "Tipo eq 'RSS'";
+            }
+            return SearchService.SearchDocuments(query, tipo, "Fecha desc", page);
         }
 
     }

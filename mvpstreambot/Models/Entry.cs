@@ -27,7 +27,7 @@ namespace mvpstreambot.Models
     {
         public static string ToMarkDown(this Entry source)
         {
-            return "";
+            return $"* **[{source.Titulo}]({source.Url})** por [{source.PublisherNombre}](http://mvpstream.azurewebsites.net/mvp/{source.PublisherId}) - {source.Fecha.ToString("dd/MM/yy")}";
         }
     }
 }
